@@ -28,18 +28,19 @@ def img_modify(img,bg):
 ########################################
 
 #initialize
-filename ="000015-"
+filename =""
 argvs = sys.argv  # parameters
 argc = len(argvs)  #number of parameters
 if (argc !=7):
   print ("please set a  threshold")
   quit()
-threshold = int(argvs[1])
-bg_img =argvs[2]
-x = int(argvs[3])
-y = int(argvs[4])
-x2 = int(argvs[5])
-y2 =int(argvs[6])
+filename = argvs[1]
+threshold = int(argvs[2])
+bg_img =argvs[3]
+x = int(argvs[4])
+y = int(argvs[5])
+x2 = int(argvs[6])
+y2 =int(argvs[7])
 argc = len(argvs)  #number of parameters
 
 
