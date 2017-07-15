@@ -1,0 +1,27 @@
+□導入方法
+Githubに最新版をあげている
+https://github.com/jedipuppy/MotImageAnalysis
+Github使いは適宜Cloneして使う。そうでない場合はdownloadして使う。
+
+□使い方
+run26ディレクトリ（201707xx-xxxxxxといったディレクトリがある場所）内にMotImageAnalysis.pyを置く。terminal等で
+MotImageAnalysis.py filename over_threshold under_threshold vmax bg_img x y x2 y2
+と打つ
+
+-filename
+201707xx-xxxxxxといったディレクトリ名をいれる
+
+-over_threshold
+MOTがあると考えられるintensity/pixelの閾値を決める。何度も走らせながら最適な値を探索するとよい
+
+-under_threshold
+MOTがないと考えられるintensity/pixelの閾値を決める。何度も走らせながら最適な値を探索するとよい
+
+-vmax 
+ヒートマップの上限値を決める。下限値は0に固定している
+
+-bg_img 
+背景画像（各画像から背景として差し引く画像）のファイル番号を決める。できるだけintensity/pixelが小さい番号がのぞましい。そうでないときは2d color map (threshold)等がMOTの部分だけ抜き出るような画像になる
+
+-x,y,x2,y2
+MOTの場所。Rbのテストから原則的に78 48 89 59に固定でいいと思われる。
