@@ -46,3 +46,15 @@ MOTがないと考えられるintensity/pixelの閾値を決める。何度も�
 
 -x,y,x2,y2
 MOTの場所。Rbのテストから原則的に78 48 89 59に固定でいいと思われる。
+
+------------------------------------------------------------------------------------------------------
+□表示内容
+- time evolution of intensity：青線各フレーム画像から背景画像を差し引き、ROI上での輝度平均をとったもの。赤はover thresholdで緑がunder threshold。赤が有意な青線のピークの少し下にくるようにした、緑線を青線のノイズに対して下側にくるように調整する
+
+-cross-section image：赤線がover thresholdを超えた画像から背景画像を差し引いたものの平均についてROI中心のx断面図。緑はunder thresholdのそれ
+
+-Fourier ：time evolution of intensityのフーリエ変換。周期的に中性化器を動かした場合等に有意な周波数成分を確認することができる
+
+-2d color map(over threshold, under threhsold, difference)：それぞれover thresholdを超えた画像から背景画像をひいたものの平均、under thresholdのそれ、その二つの差をとったもの。differenceでMOT信号がみえるように調整する（vmax等）
+
+-2d color map(over threshold, under threhsold, difference)：2d color mapのROI上のもの
