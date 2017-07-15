@@ -1,8 +1,23 @@
 □導入方法
+
 Githubに最新版をあげている
 https://github.com/jedipuppy/MotImageAnalysis
 Github使いは適宜Cloneして使う。そうでない場合はdownloadして使う。
 
+-環境構築
+Python3.x,OpenCV3.xが必要。導入はanacondaを推奨している。
+Windowsの場合はAnacondaの公式ウェブサイト（https://www.continuum.io/downloads）から最新版の64bit対応Anacondaをダウンロード、インストールする。Linuxの場合は同じくウェブサイトからダウンロードして
+bash Anaconda3-4.4.0-Linux-x86_64.sh 
+を叩く
+python3.xが入ったらターミナル等で
+conda install -c menpo opencv3
+を叩く。これでOpenCVが入っていれば
+python
+と叩いてpythonを起動した後
+import cv2
+と呼び出してもエラーが出ないはず。
+
+------------------------------------------------------------------------------------------------------
 □使い方
 run26ディレクトリ（201707xx-xxxxxxといったディレクトリがある場所）内にMotImageAnalysis.pyを置く。terminal等で
 MotImageAnalysis.py filename over_threshold under_threshold vmax bg_img x y x2 y2
