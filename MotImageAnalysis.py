@@ -98,7 +98,7 @@ while(True):
     if roi >over_threshold:
       accum_img = accum_img+modified_img
       accum_roi_img = accum_roi_img+modified_roi_img
-      print(str(roi) +" "+ str(MOT_fluorescence_to_number(np.sum(modified_roi_img),20,15)))
+      print(str(i)+" "+str(roi) +" "+ str(MOT_fluorescence_to_number(np.sum(modified_roi_img),20,15)))
       over_threshold_num += 1
 
     if roi <under_threshold:
@@ -113,8 +113,8 @@ accum_roi_img = accum_roi_img/over_threshold_num
 accum_img_under = accum_img_under/under_threshold_num
 accum_roi_img_under = accum_roi_img_under/under_threshold_num
 
-accum_img_difference = accum_img- accum_img_under
-accum_roi_img_difference = accum_roi_img- accum_roi_img_under
+accum_img_difference = accum_img
+accum_roi_img_difference = accum_roi_img
 
 #detect circle
 #ret,recon_img = cv2.threshold(accum_img_difference,vmax*0.1,65536,cv2.THRESH_BINARY)
@@ -141,7 +141,7 @@ ax9 = fig.add_subplot(3,3,9)
 ax1.set_title("time evolution of intensity")
 ax1.axhline(y=over_threshold, xmin=0, xmax=i, linewidth=2, color = 'salmon')
 ax1.axhline(y=under_threshold, xmin=0, xmax=i, linewidth=2, color = 'green')
-ax1.axhline(x=int(bg_img), xmin=0, xmax=i, linewidth=2, color = 'green')
+#ax1.axhline(x=int(bg_img), xmin=0, xmax=i, linewidth=2, color = 'green')
 ax1.plot(roi_array)
 
 
@@ -162,7 +162,7 @@ ax4.set_title("2d color map (over threshold)")
 cm_img= ax4.imshow(accum_img, vmin = 0, vmax = vmax)
 rect = patches.Rectangle((x,y),x2-x,y2-y,linewidth=1,edgecolor='r',facecolor='none')
 ax4.add_patch(rect)
-
+plt.colorbar(cm_img, ax=ax4)
 
 #draw recognized circles
 #for j in circles[0,:]:
@@ -173,6 +173,7 @@ ax4.add_patch(rect)
 #draw cross-section image of ROI
 ax5.set_title("2d color map (under threshold)")
 cm_img_under= ax5.imshow(accum_img_under, vmin = 0, vmax = vmax)
+ax5.add_patch(rect)
 plt.colorbar(cm_img_under, ax=ax5)
 
 
@@ -197,7 +198,7 @@ plt.colorbar(cm_roi_img_under, ax=ax8)
 
 #draw 2d color map of ROI difference
 ax9.set_title("2d color map (difference)")
-cm_roi_img_difference = ax9.imshow(recon_img, vmin = 0, vmax = vmax )
+cm_roi_img_difference = ax9.imshow(accum_roi_img_difference, vmin = 0, vmax = vmax )
 plt.colorbar(cm_roi_img_difference, ax=ax9)
 
 
