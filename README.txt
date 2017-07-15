@@ -9,9 +9,14 @@ Python3.x,OpenCV3.xが必要。導入はanacondaを推奨している。
 Windowsの場合はAnacondaの公式ウェブサイト（https://www.continuum.io/downloads）から最新版の64bit対応Anacondaをダウンロード、インストールする。Linuxの場合は同じくウェブサイトからダウンロードして
 bash Anaconda3-4.4.0-Linux-x86_64.sh 
 を叩く
-python3.xが入ったらターミナル等で
-conda install -c menpo opencv3
-を叩く。これでOpenCVが入っていれば
+
+要注意なのが２０１７年７月時点でPython3.6がOpenCV3に対応できていない。そのためconda-forgeチャンネルを追加する。
+conda config --add channels conda-forge
+そして
+conda install opencv
+を叩く。途中いろいろときいてくるので適宜「y」をおす。管理者権限が必要なのでwindowsならcmdを管理者権限で立ち上げる必要があるし、linuxならsudoをつけるのを忘れないように。
+
+これでOpenCVが入っていれば
 python
 と叩いてpythonを起動した後
 import cv2
