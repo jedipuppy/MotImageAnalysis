@@ -173,7 +173,8 @@ plt.colorbar(cm_img, ax=ax4)
 #draw cross-section image of ROI
 ax5.set_title("2d color map (under threshold)")
 cm_img_under= ax5.imshow(accum_img_under, vmin = 0, vmax = vmax)
-ax5.add_patch(rect)
+rect2 = patches.Rectangle((x,y),x2-x,y2-y,linewidth=1,edgecolor='r',facecolor='none')
+ax5.add_patch(rect2)
 plt.colorbar(cm_img_under, ax=ax5)
 
 
