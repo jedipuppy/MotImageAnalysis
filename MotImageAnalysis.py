@@ -108,15 +108,15 @@ roi_array = np.array([],np.float64)
 #load each images
 ########################################################################################################################
 while(True):
+    img = cv2.imread(filename+"/Image-"+filename+"-"+str(i)+".tiff", -1)
+    if img is None:
+      break
+    img = np.array(img, dtype=np.float64) 
+    modified_img = img_modify(img,bg)
+    modified_roi_img = modified_img[y:y2,x:x2]
+    roi = intensity(modified_roi_img)
+    roi_array = np.append(roi_array,roi)
     if t1 <= i and (t2 == 0 or i <= t2):
-      img = cv2.imread(filename+"/Image-"+filename+"-"+str(i)+".tiff", -1)
-      if img is None:
-        break
-      img = np.array(img, dtype=np.float64) 
-      modified_img = img_modify(img,bg)
-      modified_roi_img = modified_img[y:y2,x:x2]
-      roi = intensity(modified_roi_img)
-      roi_array = np.append(roi_array,roi)
       if roi >over_threshold:     
         accum_img = accum_img+modified_img
         accum_roi_img = accum_roi_img+modified_roi_img
