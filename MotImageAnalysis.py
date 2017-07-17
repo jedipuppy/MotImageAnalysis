@@ -87,7 +87,7 @@ y2 =int(argvs[10])
 argc = len(argvs)  #number of parameters
 
 
-i=t1
+i=1
 over_threshold_num = 0;
 under_threshold_num = 0;
 
@@ -108,14 +108,11 @@ roi_array = np.array([],np.float64)
 #load each images
 ########################################################################################################################
 while(True):
-
-
-    img = cv2.imread(filename+"/Image-"+filename+"-"+str(i)+".tiff", -1)
-    if img is None:
-      break
-    img = np.array(img, dtype=np.float64) 
-    if t2 == 0 or i <t2:
-
+    if t1 <= i and (t2 == 0 or i <= t2):
+      img = cv2.imread(filename+"/Image-"+filename+"-"+str(i)+".tiff", -1)
+      if img is None:
+        break
+      img = np.array(img, dtype=np.float64) 
       modified_img = img_modify(img,bg)
       modified_roi_img = modified_img[y:y2,x:x2]
       roi = intensity(modified_roi_img)
