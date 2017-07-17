@@ -26,7 +26,7 @@ import cv2
 ------------------------------------------------------------------------------------------------------
 □使い方
 run26ディレクトリ（201707xx-xxxxxxといったディレクトリがある場所）内にMotImageAnalysis.pyを置く。terminal等で
-MotImageAnalysis.py filename over_threshold under_threshold vmax bg_img x y x2 y2
+MotImageAnalysis.py filename over_threshold under_threshold t1 t2 bg_img x y x2 y2
 と打つ
 
 -filename
@@ -38,8 +38,11 @@ MOTがあると考えられるintensity/pixelの閾値を決める。何度も�
 -under_threshold
 MOTがないと考えられるintensity/pixelの閾値を決める。何度も走らせながら最適な値を探索するとよい
 
--vmax 
-ヒートマップの上限値を決める。下限値は0に固定している
+-t1
+解析しはじめるフレーム番号。最初からでいいなら0にする。
+
+-t2
+解析しおわるフレーム番号。最初からでいいなら0にする。
 
 -bg_img 
 背景画像（各画像から背景として差し引く画像）のファイル番号を決める。できるだけintensity/pixelが小さい番号がのぞましい。そうでないときは2d color map (threshold)等がMOTの部分だけ抜き出るような画像になる
@@ -49,12 +52,15 @@ MOTの場所。Rbのテストから原則的に78 48 89 59に固定でいいと�
 
 ------------------------------------------------------------------------------------------------------
 □表示内容
-- time evolution of intensity：青線各フレーム画像から背景画像を差し引き、ROI上での輝度平均をとったもの。赤はover thresholdで緑がunder threshold。赤が有意な青線のピークの少し下にくるようにした、緑線を青線のノイズに対して下側にくるように調整する
+- time evolution of intensity：青線各フレーム画像から背景画像を差し引き、ROI上での輝度平均をとったもの。サーモン色はover thresholdで緑がunder threshold。サーモン色が有意な青線のピークの少し下にくるようにした、緑線を青線のノイズに対して下側にくるように調整する。赤は背景画像にしたフレーム番号で、t1より前とt2より後ろは黒く網掛けされている。
 
--cross-section image：赤線がover thresholdを超えた画像から背景画像を差し引いたものの平均についてROI中心のx断面図。緑はunder thresholdのそれ
+-cross-section (horaizontal)：サーモン色がover thresholdを超えた画像から背景画像を差し引いたものの平均についてROI中心のx断面図。緑はunder thresholdのそれ
 
--Fourier ：time evolution of intensityのフーリエ変換。周期的に中性化器を動かした場合等に有意な周波数成分を確認することができる
+-cross-section (vertical)：サーモン色がover thresholdを超えた画像から背景画像を差し引いたものの平均についてROI中心のy断面図。緑はunder thresholdのそれ
 
 -2d color map(over threshold, under threhsold, difference)：それぞれover thresholdを超えた画像から背景画像をひいたものの平均、under thresholdのそれ、その二つの差をとったもの。differenceでMOT信号がみえるように調整する（vmax等）
 
 -2d color map(over threshold, under threhsold, difference)：2d color mapのROI上のもの
+
+-Max Min
+カラーマップの表示範囲を決める
