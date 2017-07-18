@@ -214,7 +214,7 @@ plt.colorbar(cm_img_under, ax=ax5)
 
 #draw 2d color map difference
 ax6.set_title("substract from over to under")
-cm_img_difference = ax6.imshow(accum_img_difference, vmin = vmin0, vmax = vmax0)
+cm_img_difference = ax6.imshow(accum_img_difference, vmin = vmin0, vmax = vmax0,cmap=cm.jet)
 plt.colorbar(cm_img_difference , ax=ax6)
 
 
