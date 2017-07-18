@@ -9,7 +9,7 @@ import cv2
 import sys
 import matplotlib.colors
 from matplotlib.widgets import Slider, Button, RadioButtons
-
+import matplotlib.cm as cm
 ########################################################################################################################
 #functions
 ########################################################################################################################
@@ -168,10 +168,10 @@ ax8 = fig.add_subplot(3,3,8)
 ax9 = fig.add_subplot(3,3,9)
 #draw intensity graph
 ax1.set_title("time evolution of intensity")
-ax1.axhline(y=over_threshold, xmin=0, xmax=i, linewidth=2, color = 'salmon')
-ax1.axhline(y=under_threshold, xmin=0, xmax=i, linewidth=2, color = 'green')
+ax1.axhline(y=over_threshold, xmin=0.001, xmax=i, linewidth=2, color = 'salmon')
+ax1.axhline(y=under_threshold, xmin=0.001, xmax=i, linewidth=2, color = 'green')
 ax1.axvline(x=int(bg_img), linewidth=2, color = 'red')
-ax1.axvspan(0, t1, facecolor='black', alpha=0.5)
+ax1.axvspan(0.001, t1, facecolor='black', alpha=0.5)
 if t2 != 0:
   ax1.axvspan(t2, i, facecolor='black', alpha=0.5)
 #ax1.axhline(x=int(bg_img), xmin=0, xmax=i, linewidth=2, color = 'green')
@@ -193,7 +193,7 @@ ax3.plot(accum_img_under[:,int((x+x2)/2)], color = 'green')
 
 #draw 2d color map
 ax4.set_title("over threthold (num. of images: "+str(over_threshold_num) +")")
-cm_img= ax4.imshow(accum_img, vmin = vmin0, vmax = vmax0)
+cm_img= ax4.imshow(accum_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet)
 rect = patches.Rectangle((x,y),x2-x,y2-y,linewidth=1,edgecolor='r',facecolor='none')
 ax4.add_patch(rect)
 plt.colorbar(cm_img, ax=ax4)
@@ -206,7 +206,7 @@ plt.colorbar(cm_img, ax=ax4)
 
 #draw cross-section image of ROI
 ax5.set_title("under threthold (num. of images: "+str(under_threshold_num) +")")
-cm_img_under= ax5.imshow(accum_img_under, vmin = vmin0, vmax = vmax0)
+cm_img_under= ax5.imshow(accum_img_under, vmin = vmin0, vmax = vmax0,cmap=cm.jet)
 rect2 = patches.Rectangle((x,y),x2-x,y2-y,linewidth=1,edgecolor='r',facecolor='none')
 ax5.add_patch(rect2)
 plt.colorbar(cm_img_under, ax=ax5)
@@ -221,19 +221,19 @@ plt.colorbar(cm_img_difference , ax=ax6)
 
 #draw cross-section image of ROI
 ax7.set_title("over threthold in ROI (num. of images: "+str(over_threshold_num) +")", y=1.06)
-cm_roi_img= ax7.imshow(accum_roi_img, vmin = vmin0, vmax = vmax0)
+cm_roi_img= ax7.imshow(accum_roi_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet)
 plt.colorbar(cm_roi_img, ax=ax7)
 
 
 
 #draw cross-section image of ROI
 ax8.set_title("under threthold in ROI (num. of images: "+str(under_threshold_num) +")", y=1.06)
-cm_roi_img_under= ax8.imshow(accum_roi_img_under, vmin = vmin0, vmax = vmax0)
+cm_roi_img_under= ax8.imshow(accum_roi_img_under, vmin = vmin0, vmax = vmax0,cmap=cm.jet)
 plt.colorbar(cm_roi_img_under, ax=ax8)
 
 #draw 2d color map of ROI difference
 ax9.set_title("substract from over to under in ROI", y=1.06)
-cm_roi_img_difference = ax9.imshow(accum_roi_img_difference, vmin = vmin0, vmax = vmax0 )
+cm_roi_img_difference = ax9.imshow(accum_roi_img_difference, vmin = vmin0, vmax = vmax0,cmap=cm.jet )
 plt.colorbar(cm_roi_img_difference, ax=ax9)
 
 ########################################################################################################################
