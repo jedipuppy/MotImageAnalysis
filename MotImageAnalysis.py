@@ -155,7 +155,7 @@ print("over-threshold sum:"+str(np.sum(accum_img))+"under-threshold:"+str(np.sum
 
 fig = plt.figure(figsize=(22,12))
 fig.subplots_adjust(hspace=.4)
-suptitle = plt.suptitle("summary-"+filename+".png", x = 0.5, y = 0.97, fontsize=24)
+suptitle = plt.suptitle("summary-"+filename+".png, ROI: x="+str(x)+",y="+str(y)+",x2="+str(x2)+",y2="+str(y2) , x = 0.5, y = 0.97, fontsize=24)
 # サブプロットを追加
 ax1 = fig.add_subplot(3,3,1)
 ax2 = fig.add_subplot(3,3,2)
