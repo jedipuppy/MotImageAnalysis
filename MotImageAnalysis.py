@@ -87,6 +87,7 @@ y2 =int(argvs[10])
 argc = len(argvs)  #number of parameters
 
 
+
 i=1
 over_threshold_num = 0;
 under_threshold_num = 0;
@@ -96,13 +97,19 @@ under_threshold_num = 0;
 bg = cv2.imread(filename+"/Image-"+filename+"-"+str(bg_img)+".tiff",-1)
 bg = np.array(bg, dtype=np.float64) 
 roi_bg = bg[y:y2,x:x2]
+roi2_bg = bg[62:76,63:93]
 accum_img = np.zeros((128,168),np.float64)
 accum_img_under = np.zeros((128,168),np.float64)
 accum_roi_img = np.zeros((y2-y,x2-x),np.float64)
 accum_roi_img_under = np.zeros((y2-y,x2-x),np.float64)
 roi_array = np.array([],np.float64)
+roi2_array = np.array([],np.float64)
+roi_period_array = np.array([],np.float64)
+roi2_period_array = np.array([],np.float64)
 previous_roi = float(0)
 diff_roi_array = np.array([],np.float64)
+diff_roi2_array = np.array([],np.float64)
+total_array=  np.array([],np.float64)
 
 ########################################################################################################################
 #load each images
@@ -114,11 +121,17 @@ while(True):
     img = np.array(img, dtype=np.float64) 
     modified_img = img_modify(img,bg)
     modified_roi_img = modified_img[y:y2,x:x2]
+    modified_roi2_img = modified_img[62:76,63:93]
     roi = intensity(modified_roi_img)
+    roi2 = intensity(modified_roi2_img)
     diff_roi_array = np.append(diff_roi_array,roi - previous_roi)
-
+    total_array = np.append(total_array,intensity(modified_img))
     roi_array = np.append(roi_array,roi)
+    roi2_array = np.append(roi2_array,roi2)
+
     if t1 <= i and (t2 == 0 or i <= t2):
+      roi_period_array= np.append(roi_period_array,roi)
+      roi2_period_array= np.append(roi2_period_array,roi2)
       if roi >over_threshold:     
         accum_img = accum_img+modified_img
         accum_roi_img = accum_roi_img+modified_roi_img
@@ -139,7 +152,8 @@ accum_roi_img_under = accum_roi_img_under/under_threshold_num
 
 accum_img_difference = accum_img -accum_img_under
 accum_roi_img_difference = accum_roi_img - accum_roi_img_under
-
+print ("number of roi: "+str(len(roi_period_array)))
+print ("number of roi2: "+str(len(roi2_period_array)))
 #detect circle
 #ret,recon_img = cv2.threshold(accum_img_difference,vmax*0.1,65536,cv2.THRESH_BINARY)
 #recon_img = recon_img.astype(np.uint8)
@@ -181,29 +195,32 @@ ax1.axvspan(0.001, t1, facecolor='black', alpha=0.5)
 if t2 != 0:
   ax1.axvspan(t2, i, facecolor='black', alpha=0.5)
 ax1twin = ax1.twinx()
-ax1twin.plot(dat , color ="lightcoral", linewidth=0.3)
+ax1.plot(dat , color ="lightcoral", linewidth=0.3)
 #ax1.axhline(x=int(bg_img), xmin=0, xmax=i, linewidth=2, color = 'green')
 ax1twin.axhline(y=over_threshold, xmin=0.001, xmax=i, linewidth=2, color = 'salmon')
 ax1twin.axhline(y=under_threshold, xmin=0.001, xmax=i, linewidth=2, color = 'green')
 ax1twin.axvline(x=int(bg_img), linewidth=2, color = 'red')
 
 
-ax1.plot(roi_array , color ="blue", linewidth=0.5)
+ax1twin.plot(roi_array , color ="blue", linewidth=0.5)
 #draw cross-section image
 ax7.set_title("cross-section (horizontal)")
-ax7.plot(accum_img[int((y+y2)/2),:], color = 'salmon')
-ax7.plot(accum_img_under[int((y+y2)/2),:], color = 'green')
-
+ax7.scatter(roi_period_array,roi2_period_array)
+ax7.set_xlim(np.min(roi_period_array),np.max(roi_period_array))
+ax7.set_ylim(np.min(roi2_period_array), np.max(roi2_period_array))
 
 #draw cross-section image of ROI
 ax4.set_title("cross-section (vertical)")
+ax4.axvspan(0.001, t1, facecolor='black', alpha=0.5)
+if t2 != 0:
+  ax4.axvspan(t2, i, facecolor='black', alpha=0.5)
 #ax3.plot(np.fft.fft(roi_array))
 #ax3.set_xlim([0, 500])
-ax4.plot(dat)
+ax4.plot(roi2_array)
 
 #draw 2d color map
 ax2.set_title("over threthold (num. of images: "+str(over_threshold_num) +")")
-cm_img= ax2.imshow(accum_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='nearest')
+cm_img= ax2.imshow(accum_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='bicubic')
 rect = patches.Rectangle((x,y),x2-x,y2-y,linewidth=1,edgecolor='r',facecolor='none')
 ax2.add_patch(rect)
 plt.colorbar(cm_img, ax=ax2)
@@ -216,7 +233,7 @@ plt.colorbar(cm_img, ax=ax2)
 
 #draw cross-section image of ROI
 ax5.set_title("under threthold (num. of images: "+str(under_threshold_num) +")")
-cm_img_under= ax5.imshow(accum_img_under, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='nearest')
+cm_img_under= ax5.imshow(accum_img_under, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='bicubic')
 rect2 = patches.Rectangle((x,y),x2-x,y2-y,linewidth=1,edgecolor='r',facecolor='none')
 ax5.add_patch(rect2)
 plt.colorbar(cm_img_under, ax=ax5)
@@ -224,26 +241,26 @@ plt.colorbar(cm_img_under, ax=ax5)
 
 #draw 2d color map difference
 ax8.set_title("substract from over to under")
-cm_img_difference = ax8.imshow(accum_img_difference, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='nearest')
+cm_img_difference = ax8.imshow(accum_img_difference, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='bicubic')
 plt.colorbar(cm_img_difference , ax=ax8)
 
 
 
 #draw cross-section image of ROI
 ax3.set_title("over threthold in ROI (num. of images: "+str(over_threshold_num) +")", y=1.06)
-cm_roi_img= ax3.imshow(accum_roi_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='nearest')
+cm_roi_img= ax3.imshow(accum_roi_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='bicubic')
 plt.colorbar(cm_roi_img, ax=ax3)
 
 
 
 #draw cross-section image of ROI
 ax6.set_title("under threthold in ROI (num. of images: "+str(under_threshold_num) +")", y=1.06)
-cm_roi_img_under= ax6.imshow(accum_roi_img_under, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='nearest')
+cm_roi_img_under= ax6.imshow(accum_roi_img_under, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='bicubic')
 plt.colorbar(cm_roi_img_under, ax=ax6)
 
 #draw 2d color map of ROI difference
 ax9.set_title("substract from over to under in ROI", y=1.06)
-cm_roi_img_difference = ax9.imshow(accum_roi_img_difference, vmin = vmin0, vmax = vmax0,cmap=cm.jet , interpolation='nearest')
+cm_roi_img_difference = ax9.imshow(accum_roi_img_difference, vmin = vmin0, vmax = vmax0,cmap=cm.jet , interpolation='bicubic')
 plt.colorbar(cm_roi_img_difference, ax=ax9)
 
 ########################################################################################################################
