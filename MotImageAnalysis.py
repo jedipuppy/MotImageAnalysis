@@ -71,7 +71,7 @@ vmax0 = 30
 filename =""
 argvs = sys.argv  # parameters
 argc = len(argvs)  #number of parameters
-if (argc !=11):
+if (argc !=15):
   print ("please set a parameters")
   quit()
 filename = argvs[1]
@@ -84,6 +84,10 @@ x = int(argvs[7])
 y = int(argvs[8])
 x2 = int(argvs[9])
 y2 =int(argvs[10])
+x_2 = int(argvs[11])
+y_2 = int(argvs[12])
+x2_2 = int(argvs[13])
+y2_2 =int(argvs[14])
 argc = len(argvs)  #number of parameters
 
 
@@ -97,7 +101,7 @@ under_threshold_num = 0;
 bg = cv2.imread(filename+"/Image-"+filename+"-"+str(bg_img)+".tiff",-1)
 bg = np.array(bg, dtype=np.float64) 
 roi_bg = bg[y:y2,x:x2]
-roi2_bg = bg[62:76,63:93]
+roi2_bg = bg[y_2:y2_2,x_2:x2_2]
 accum_img = np.zeros((128,168),np.float64)
 accum_img_under = np.zeros((128,168),np.float64)
 accum_roi_img = np.zeros((y2-y,x2-x),np.float64)
@@ -121,7 +125,7 @@ while(True):
     img = np.array(img, dtype=np.float64) 
     modified_img = img_modify(img,bg)
     modified_roi_img = modified_img[y:y2,x:x2]
-    modified_roi2_img = modified_img[62:76,63:93]
+    modified_roi2_img = modified_img[y_2:y2_2,x_2:x2_2]
     roi = intensity(modified_roi_img)
     roi2 = intensity(modified_roi2_img)
     diff_roi_array = np.append(diff_roi_array,roi - previous_roi)
@@ -223,6 +227,8 @@ ax2.set_title("over threthold (num. of images: "+str(over_threshold_num) +")")
 cm_img= ax2.imshow(accum_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='nearest')
 rect = patches.Rectangle((x,y),x2-x,y2-y,linewidth=1,edgecolor='r',facecolor='none')
 ax2.add_patch(rect)
+rect_2 = patches.Rectangle((x_2,y_2),x2_2-x_2,y2_2-y_2,linewidth=1,edgecolor='orange',facecolor='none')
+ax2.add_patch(rect_2)
 plt.colorbar(cm_img, ax=ax2)
 
 #draw recognized circles
@@ -236,6 +242,8 @@ ax5.set_title("under threthold (num. of images: "+str(under_threshold_num) +")")
 cm_img_under= ax5.imshow(accum_img_under, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='nearest')
 rect2 = patches.Rectangle((x,y),x2-x,y2-y,linewidth=1,edgecolor='r',facecolor='none')
 ax5.add_patch(rect2)
+rect2_2 = patches.Rectangle((x_2,y_2),x2_2-x_2,y2_2-y_2,linewidth=1,edgecolor='orange',facecolor='none')
+ax5.add_patch(rect2_2)
 plt.colorbar(cm_img_under, ax=ax5)
 
 
