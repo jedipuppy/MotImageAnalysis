@@ -220,7 +220,7 @@ ax4.plot(roi2_array)
 
 #draw 2d color map
 ax2.set_title("over threthold (num. of images: "+str(over_threshold_num) +")")
-cm_img= ax2.imshow(accum_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='bicubic')
+cm_img= ax2.imshow(accum_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='nearest')
 rect = patches.Rectangle((x,y),x2-x,y2-y,linewidth=1,edgecolor='r',facecolor='none')
 ax2.add_patch(rect)
 plt.colorbar(cm_img, ax=ax2)
@@ -233,7 +233,7 @@ plt.colorbar(cm_img, ax=ax2)
 
 #draw cross-section image of ROI
 ax5.set_title("under threthold (num. of images: "+str(under_threshold_num) +")")
-cm_img_under= ax5.imshow(accum_img_under, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='bicubic')
+cm_img_under= ax5.imshow(accum_img_under, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='nearest')
 rect2 = patches.Rectangle((x,y),x2-x,y2-y,linewidth=1,edgecolor='r',facecolor='none')
 ax5.add_patch(rect2)
 plt.colorbar(cm_img_under, ax=ax5)
@@ -241,26 +241,26 @@ plt.colorbar(cm_img_under, ax=ax5)
 
 #draw 2d color map difference
 ax8.set_title("substract from over to under")
-cm_img_difference = ax8.imshow(accum_img_difference, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='bicubic')
+cm_img_difference = ax8.imshow(accum_img_difference, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='nearest')
 plt.colorbar(cm_img_difference , ax=ax8)
 
 
 
 #draw cross-section image of ROI
 ax3.set_title("over threthold in ROI (num. of images: "+str(over_threshold_num) +")", y=1.06)
-cm_roi_img= ax3.imshow(accum_roi_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='bicubic')
+cm_roi_img= ax3.imshow(accum_roi_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='nearest')
 plt.colorbar(cm_roi_img, ax=ax3)
 
 
 
 #draw cross-section image of ROI
 ax6.set_title("under threthold in ROI (num. of images: "+str(under_threshold_num) +")", y=1.06)
-cm_roi_img_under= ax6.imshow(accum_roi_img_under, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='bicubic')
+cm_roi_img_under= ax6.imshow(accum_roi_img_under, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='nearest')
 plt.colorbar(cm_roi_img_under, ax=ax6)
 
 #draw 2d color map of ROI difference
 ax9.set_title("substract from over to under in ROI", y=1.06)
-cm_roi_img_difference = ax9.imshow(accum_roi_img_difference, vmin = vmin0, vmax = vmax0,cmap=cm.jet , interpolation='bicubic')
+cm_roi_img_difference = ax9.imshow(accum_roi_img_difference, vmin = vmin0, vmax = vmax0,cmap=cm.jet , interpolation='nearest')
 plt.colorbar(cm_roi_img_difference, ax=ax9)
 
 ########################################################################################################################
