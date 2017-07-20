@@ -169,6 +169,9 @@ print("over-threshold:"+str(over_threshold_num)+"under-threshold:"+str(under_thr
 print("over-threshold sum:"+str(np.sum(accum_img))+"under-threshold:"+str(np.sum(accum_img_under)))
 
 
+corr = np.corrcoef(roi_period_array, roi2_period_array)
+print(corr[0,1])
+
 ##loading Dat File
 dat =[]
 for l in open(filename+"/Graph-"+filename+".dat").readlines():
@@ -208,10 +211,11 @@ ax1twin.axvline(x=int(bg_img), linewidth=2, color = 'red')
 
 ax1twin.plot(roi_array , color ="blue", linewidth=0.5)
 #draw cross-section image
-ax7.set_title("cross-section (horizontal)")
+ax7.set_title("corrcoef:" +str(corr[0,1]))
 ax7.scatter(roi_period_array,roi2_period_array)
 ax7.set_xlim(np.min(roi_period_array),np.max(roi_period_array))
 ax7.set_ylim(np.min(roi2_period_array), np.max(roi2_period_array))
+
 
 #draw cross-section image of ROI
 ax4.set_title("cross-section (vertical)")
