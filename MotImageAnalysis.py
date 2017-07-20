@@ -101,8 +101,8 @@ accum_img_under = np.zeros((128,168),np.float64)
 accum_roi_img = np.zeros((y2-y,x2-x),np.float64)
 accum_roi_img_under = np.zeros((y2-y,x2-x),np.float64)
 roi_array = np.array([],np.float64)
-
-
+previous_roi = float(0)
+diff_roi_array = np.array([],np.float64)
 
 ########################################################################################################################
 #load each images
@@ -115,19 +115,21 @@ while(True):
     modified_img = img_modify(img,bg)
     modified_roi_img = modified_img[y:y2,x:x2]
     roi = intensity(modified_roi_img)
+    diff_roi_array = np.append(diff_roi_array,roi - previous_roi)
+
     roi_array = np.append(roi_array,roi)
     if t1 <= i and (t2 == 0 or i <= t2):
       if roi >over_threshold:     
         accum_img = accum_img+modified_img
         accum_roi_img = accum_roi_img+modified_roi_img
-        print(str(i)+" "+str(roi) +" "+ str(MOT_fluorescence_to_number(np.sum(modified_roi_img),20,15)))
+        print(str(i)+" "+str(roi) +" "+ str(roi- previous_roi))
         over_threshold_num += 1
 
       if roi <under_threshold:
         accum_img_under = accum_img_under+modified_img
         accum_roi_img_under = accum_roi_img_under+modified_roi_img
         under_threshold_num += 1     
-
+    previous_roi = roi
     i += 1
 
 accum_img = accum_img/over_threshold_num
@@ -148,6 +150,12 @@ print("over-threshold:"+str(over_threshold_num)+"under-threshold:"+str(under_thr
 
 print("over-threshold sum:"+str(np.sum(accum_img))+"under-threshold:"+str(np.sum(accum_img_under)))
 
+
+##loading Dat File
+dat =[]
+for l in open(filename+"/Graph-"+filename+".dat").readlines():
+    data = l[:-1].split('\t')
+    dat += [float(data[5])]
 
 ########################################################################################################################
 #draw fig
@@ -176,27 +184,24 @@ if t2 != 0:
   ax1.axvspan(t2, i, facecolor='black', alpha=0.5)
 #ax1.axhline(x=int(bg_img), xmin=0, xmax=i, linewidth=2, color = 'green')
 ax1.plot(roi_array)
-
-
 #draw cross-section image
-ax2.set_title("cross-section (horizontal)")
-ax2.plot(accum_img[int((y+y2)/2),:], color = 'salmon')
-ax2.plot(accum_img_under[int((y+y2)/2),:], color = 'green')
+ax7.set_title("cross-section (horizontal)")
+ax7.plot(accum_img[int((y+y2)/2),:], color = 'salmon')
+ax7.plot(accum_img_under[int((y+y2)/2),:], color = 'green')
 
 
 #draw cross-section image of ROI
-ax3.set_title("cross-section (vertical)")
+ax4.set_title("cross-section (vertical)")
 #ax3.plot(np.fft.fft(roi_array))
 #ax3.set_xlim([0, 500])
-ax3.plot(accum_img[:,int((x+x2)/2)], color = 'salmon')
-ax3.plot(accum_img_under[:,int((x+x2)/2)], color = 'green')
+ax4.plot(dat)
 
 #draw 2d color map
-ax4.set_title("over threthold (num. of images: "+str(over_threshold_num) +")")
-cm_img= ax4.imshow(accum_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet)
+ax2.set_title("over threthold (num. of images: "+str(over_threshold_num) +")")
+cm_img= ax2.imshow(accum_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='nearest')
 rect = patches.Rectangle((x,y),x2-x,y2-y,linewidth=1,edgecolor='r',facecolor='none')
-ax4.add_patch(rect)
-plt.colorbar(cm_img, ax=ax4)
+ax2.add_patch(rect)
+plt.colorbar(cm_img, ax=ax2)
 
 #draw recognized circles
 #for j in circles[0,:]:
@@ -206,34 +211,34 @@ plt.colorbar(cm_img, ax=ax4)
 
 #draw cross-section image of ROI
 ax5.set_title("under threthold (num. of images: "+str(under_threshold_num) +")")
-cm_img_under= ax5.imshow(accum_img_under, vmin = vmin0, vmax = vmax0,cmap=cm.jet)
+cm_img_under= ax5.imshow(accum_img_under, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='nearest')
 rect2 = patches.Rectangle((x,y),x2-x,y2-y,linewidth=1,edgecolor='r',facecolor='none')
 ax5.add_patch(rect2)
 plt.colorbar(cm_img_under, ax=ax5)
 
 
 #draw 2d color map difference
-ax6.set_title("substract from over to under")
-cm_img_difference = ax6.imshow(accum_img_difference, vmin = vmin0, vmax = vmax0,cmap=cm.jet)
-plt.colorbar(cm_img_difference , ax=ax6)
+ax8.set_title("substract from over to under")
+cm_img_difference = ax8.imshow(accum_img_difference, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='nearest')
+plt.colorbar(cm_img_difference , ax=ax8)
 
 
 
 #draw cross-section image of ROI
-ax7.set_title("over threthold in ROI (num. of images: "+str(over_threshold_num) +")", y=1.06)
-cm_roi_img= ax7.imshow(accum_roi_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet)
-plt.colorbar(cm_roi_img, ax=ax7)
+ax3.set_title("over threthold in ROI (num. of images: "+str(over_threshold_num) +")", y=1.06)
+cm_roi_img= ax3.imshow(accum_roi_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='nearest')
+plt.colorbar(cm_roi_img, ax=ax3)
 
 
 
 #draw cross-section image of ROI
-ax8.set_title("under threthold in ROI (num. of images: "+str(under_threshold_num) +")", y=1.06)
-cm_roi_img_under= ax8.imshow(accum_roi_img_under, vmin = vmin0, vmax = vmax0,cmap=cm.jet)
-plt.colorbar(cm_roi_img_under, ax=ax8)
+ax6.set_title("under threthold in ROI (num. of images: "+str(under_threshold_num) +")", y=1.06)
+cm_roi_img_under= ax6.imshow(accum_roi_img_under, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='nearest')
+plt.colorbar(cm_roi_img_under, ax=ax6)
 
 #draw 2d color map of ROI difference
 ax9.set_title("substract from over to under in ROI", y=1.06)
-cm_roi_img_difference = ax9.imshow(accum_roi_img_difference, vmin = vmin0, vmax = vmax0,cmap=cm.jet )
+cm_roi_img_difference = ax9.imshow(accum_roi_img_difference, vmin = vmin0, vmax = vmax0,cmap=cm.jet , interpolation='nearest')
 plt.colorbar(cm_roi_img_difference, ax=ax9)
 
 ########################################################################################################################
