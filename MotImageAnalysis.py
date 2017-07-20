@@ -176,14 +176,19 @@ ax8 = fig.add_subplot(3,3,8)
 ax9 = fig.add_subplot(3,3,9)
 #draw intensity graph
 ax1.set_title("time evolution of intensity")
-ax1.axhline(y=over_threshold, xmin=0.001, xmax=i, linewidth=2, color = 'salmon')
-ax1.axhline(y=under_threshold, xmin=0.001, xmax=i, linewidth=2, color = 'green')
-ax1.axvline(x=int(bg_img), linewidth=2, color = 'red')
+
 ax1.axvspan(0.001, t1, facecolor='black', alpha=0.5)
 if t2 != 0:
   ax1.axvspan(t2, i, facecolor='black', alpha=0.5)
+ax1twin = ax1.twinx()
+ax1twin.plot(dat , color ="lightcoral", linewidth=0.3)
 #ax1.axhline(x=int(bg_img), xmin=0, xmax=i, linewidth=2, color = 'green')
-ax1.plot(roi_array)
+ax1twin.axhline(y=over_threshold, xmin=0.001, xmax=i, linewidth=2, color = 'salmon')
+ax1twin.axhline(y=under_threshold, xmin=0.001, xmax=i, linewidth=2, color = 'green')
+ax1twin.axvline(x=int(bg_img), linewidth=2, color = 'red')
+
+
+ax1.plot(roi_array , color ="blue", linewidth=0.5)
 #draw cross-section image
 ax7.set_title("cross-section (horizontal)")
 ax7.plot(accum_img[int((y+y2)/2),:], color = 'salmon')
