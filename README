@@ -30,3 +30,5 @@ import cv2
 MotImageAnalysis.py 20171220-231705 300 20 0 0 0 70 50 81 57
 ・MotImageAnalysisSegmentedTimeEvol.py
 python MotImageAnalysisSegmentedTimeEvol.py 20171222-040015 0 0 50 50 5 5 2 2
+・MotImageAnalysisTime.py
+MotImageAnalysisTime.py 20171222-040015 460 470 471 480 475 70 50 81 57
