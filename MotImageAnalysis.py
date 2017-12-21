@@ -48,6 +48,7 @@ class ImageAnalysis():
         self.data5 = []
         self.data6 = []
         self.data7 = [] 
+        self.data8 = [] 
         print(self.filename+"/Graph-"+self.filename+".dat")
         for l in open(self.filename+"/Graph-"+self.filename+".dat").readlines():
             data = l[:-1].split('\t')   
@@ -58,7 +59,7 @@ class ImageAnalysis():
             self.data5 += [float(data[9])]
             self.data6 += [float(data[10])]
             self.data7 += [float(data[11])]      
-
+            self.data8 += [float(data[11])] 
 
   #ファイル番号を入れるとその画像ファイルを返す関数
     def loadImg(self,filename,file_number):
@@ -158,10 +159,11 @@ vmax0 = 20
 
 image_ana = ImageAnalysis(filename,upper_threshold,lower_threshold,background_file_number,start_number,stop_number,x,x2,y,y2)
 fig = plt.figure(figsize=(14,9))
+fig.subplots_adjust(top = 0.930,bottom =0.095,left=0.060,right =0.940)
 suptitle = plt.suptitle("summary-"+filename+".png, ROI: x="+str(x)+",y="+str(y)+",x2="+str(x2)+",y2="+str(y2) , x = 0.5, y = 0.97, fontsize=18)
 gs = gridspec.GridSpec(4, 3,
                        width_ratios=[1, 1,1],
-                       height_ratios=[1, 1,1,1],
+                       height_ratios=[1, 0.7,1,3],
                        wspace=0.1,
                        hspace=0.2
                        )
@@ -172,35 +174,45 @@ ax4 = plt.subplot(gs[3,0])
 ax5 = plt.subplot(gs[3,1])
 ax6 = plt.subplot(gs[3,2])
 
-data1_ax1 = ax1.twinx()
-data2_ax1 = ax1.twinx()
-data3_ax1 = ax1.twinx()
-data4_ax1 = ax1.twinx()
-
 
 ax1.plot(image_ana.roi_array, linewidth=2)
-data1_ax1.plot(image_ana.data1, linewidth=0.3)
-data1_ax1.axvspan(0, image_ana.start_number, facecolor='black', alpha=0.5)
-if image_ana.stop_number != 0:
-    data1_ax1.axvspan(image_ana.stop_number,len(image_ana.data1) , facecolor='black', alpha=0.5)
 
-ax1.axhline(y=image_ana.upper_threshold, linewidth=2, color = 'green')
-ax1.axhline(y=image_ana.lower_threshold, linewidth=2, color = 'green')        
+ax1.axvspan(0, image_ana.start_number, facecolor='black', alpha=0.5)
+if image_ana.stop_number != 0:
+    ax1.axvspan(image_ana.stop_number,len(image_ana.data1) , facecolor='black', alpha=0.5)
+
+ax1.axhline(y=image_ana.upper_threshold, linewidth=1, color = 'green')
+ax1.axhline(y=image_ana.lower_threshold, linewidth=1, color = 'green')        
 
 
 ax1.tick_params(labelbottom="off")
 
-ax2.plot(image_ana.data3 , linewidth=0.5, color ="r")
-data4_ax2 = ax2.twinx()
-data4_ax2.plot(image_ana.data4 , linewidth=0.5, color ="g")
-data2_ax2 = ax2.twinx()
-data2_ax2.plot(image_ana.data2 , linewidth=0.5, color ="b")
-
-ax3.plot(image_ana.data5 , linewidth=0.5, color ="r")
-data6_ax3 = ax3.twinx()
-data6_ax3.plot(image_ana.data6 , linewidth=0.5, color ="g")
+ax2.plot(image_ana.data3 , linewidth=0.8, color ="r")
+data1_ax3 = ax3.twinx()
+data1_ax3.plot(image_ana.data1, linewidth=0.8, color ="c", label="I2")
+data2_ax3 = ax3.twinx()
+data2_ax3.plot(image_ana.data2 , linewidth=0.8, color ="b", label="scan signal")
+data3_ax3 = ax3.twinx()
+data3_ax3.plot(image_ana.data3 , linewidth=0.8, color ="g", label="resonator")
 data7_ax3 = ax3.twinx()
-data7_ax3.plot(image_ana.data7 , linewidth=0.5, color ="b")
+data7_ax3.plot(image_ana.data7 , linewidth=0.8, color ="r", label="wavelength TOF")
+data8_ax3 = ax3.twinx()
+data8_ax3.plot(image_ana.data8 , linewidth=0.8, color ="k", label="wavelength Laser")
+
+ax3.legend(loc=0)
+data1_ax3.legend(loc=1)
+data2_ax3.legend(loc=2)
+data3_ax3.legend(loc=3)
+data7_ax3.legend(loc=4)
+data8_ax3.legend(loc=5)
+
+
+ax2.plot(image_ana.data5 , linewidth=0.8, color ="r", label="B field")
+data6_ax2 = ax2.twinx()
+data6_ax2.plot(image_ana.data6 , linewidth=0.8, color ="g", label="Y target temp")
+
+ax2.legend(loc=0)
+data6_ax2.legend(loc=1)
 
 upper_img_fig = ax4.imshow(image_ana.upper_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='bicubic')
 lower_img_fig = ax5.imshow(image_ana.lower_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='bicubic')
@@ -230,6 +242,17 @@ def update(val):
     fig.canvas.update()
 smin.on_changed(update)
 smax.on_changed(update)
+
+
+
+
+########################################################################################################################
+#save images
+########################################################################################################################
+cv2.imwrite("./"+filename+"/upper_img-"+filename+".tif",np.array(np.round(image_ana.upper_img), dtype=np.int16) )
+cv2.imwrite("./"+filename+"/lower_img-"+filename+".tif",np.array(np.round(image_ana.lower_img), dtype=np.int16))
+cv2.imwrite("./"+filename+"/diff_img"+filename+".tif",np.array(np.round(image_ana.diff_img), dtype=np.int16))
+fig.savefig("./summary-"+filename+".png")
 
 plt.show()
 
