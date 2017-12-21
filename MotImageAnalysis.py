@@ -186,7 +186,7 @@ if image_ana.stop_number != 0:
 
 ax1.axhline(y=image_ana.upper_threshold, linewidth=1, color = 'green')
 ax1.axhline(y=image_ana.lower_threshold, linewidth=1, color = 'green') 
-ax1.axvline(x =background_file_number, linewidth=1, color = 'green')        
+ax1.axvline(x =int(background_file_number), linewidth=1, color = 'salmon')        
 data5_ax1 = ax1.twinx()
 data5_ax1.plot(image_ana.data5 , linewidth=0.8, color ="r", label="B field")
 data6_ax1 = ax1.twinx()
@@ -213,9 +213,9 @@ data8_ax3.legend(loc=5)
 data5_ax1.legend(loc=0)
 data6_ax1.legend(loc=1)
 
-upper_img_fig = ax4.imshow(image_ana.upper_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='bicubic')
-lower_img_fig = ax5.imshow(image_ana.lower_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='bicubic')
-diff_img_fig = ax6.imshow(image_ana.diff_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='bicubic')
+upper_img_fig = ax4.imshow(image_ana.upper_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='nearest')
+lower_img_fig = ax5.imshow(image_ana.lower_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='nearest')
+diff_img_fig = ax6.imshow(image_ana.diff_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='nearest')
 
 rect1 = patches.Rectangle((x,y),x2-x,y2-y,linewidth=1,edgecolor='w',facecolor='none')
 rect2 = patches.Rectangle((x,y),x2-x,y2-y,linewidth=1,edgecolor='w',facecolor='none')
