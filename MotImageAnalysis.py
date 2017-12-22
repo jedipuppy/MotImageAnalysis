@@ -226,8 +226,8 @@ ax6.add_patch(rect3)
 ########################################################################################################################
 #slider
 ########################################################################################################################
-axmin = fig.add_axes([0.05, 0.02, 0.4, 0.02], axisbg="gray")
-axmax  = fig.add_axes([0.05, 0.05, 0.4, 0.02], axisbg="gray")
+axmin = fig.add_axes([0.05, 0.02, 0.4, 0.02], facecolor="gray")
+axmax  = fig.add_axes([0.05, 0.05, 0.4, 0.02], facecolor="gray")
 
 smin = Slider(axmin, 'Min', 0, 10, valinit=vmin0)
 smax = Slider(axmax, 'Max', 0, 100, valinit=vmax0)
