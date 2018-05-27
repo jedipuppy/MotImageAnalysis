@@ -25,8 +25,18 @@ import cv2
 
 ------------------------------------------------------------------------------------------------------
 □使い方
-典型的なコマンド
+
 - MotImageAnalysisTime.py
+磁場オフと磁場オンでそれぞれ画像をaverageして差分をみるスクリプト
+--引数
+python MotImageAnalysisTime.py ファイル名 磁場オンの開始ファイル番号 磁場オンの終了ファイル番号 磁場オフの開始ファイル番号 磁場オフの終了ファイル番号 バックグランドうファイル番号 x y x2 y2
+--典型的なコマンド
 python MotImageAnalysisTime.py 20180525-183043 2210 2213 2191 2201 2200 81 58 89 67
+
+
 - MotImageAnalysisCorrelation.py
+セグメントごとの時間変動の相関度をマッピングするスクリプト
+--引数
+python MotImageAnalysisCorrelation.py ファイル名 時間スタート 時間エンド セグメント開始x セグメント開始y セグメントx セグメントy セグメント数 基準x 基準y 基準x2 基準y2
+--典型的なコマンド
 python MotImageAnalysisCorrelation.py 20180525-183043 2000 2500 70 45 5 5 8 81 58 89 67
