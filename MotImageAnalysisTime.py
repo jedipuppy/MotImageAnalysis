@@ -66,7 +66,7 @@ class ImageAnalysis():
 
         roi = self.intensity(roi_modified_img)
         MotNumber = self.NumberCalib.MOT_fluorescence_to_number(np.sum(img),10e-3,0.1)
-        print(filename,roi,MotNumber)
+        print(file_number,roi,MotNumber)
 
 
 
@@ -96,10 +96,12 @@ class ImageAnalysis():
   #画像を蓄積
     def accum_img(self,img,file_number):
 
-        if file_number > self.start_number and file_number <self.start_number2:
+        if file_number > self.start_number and file_number < self.stop_number:
+            print("accum to upper ",file_number,self.start_number,self.stop_number,self.start_number2,self.stop_number2);
             self.upper_img_num += 1         
             self.upper_img += img
-        if file_number > self.stop_number and file_number <self.stop_number2:
+        if file_number > self.start_number2 and file_number <self.stop_number2:
+            print("accum to lower ",file_number,self.start_number,self.stop_number,self.start_number2,self.stop_number2);
             self.lower_img_num += 1       
             self.lower_img += img        
 
@@ -116,8 +118,8 @@ class ImageAnalysis():
                 break;
             file_number += 1
 
-            if file_number > start_number and file_number <stop_number2 and stop_number2 != 0:
-                self.accum_img(self.img_array[-1],file_number)
+ #           if file_number > start_number and file_number <stop_number2 and stop_number2 != 0:
+            self.accum_img(self.img_array[-1],file_number)
         if self.upper_img_num != 0:
             print ("accum upper",file_number)
             self.upper_img =  self.upper_img/self.upper_img_num
@@ -168,8 +170,8 @@ if (argc !=11):
   quit()
 filename = argvs[1]
 start_number = float(argvs[2])
-start_number2 = float(argvs[3])
-stop_number = int(argvs[4])
+stop_number = float(argvs[3])
+start_number2 = int(argvs[4])
 stop_number2 = int(argvs[5])
 background_file_number =argvs[6]
 x = int(argvs[7])
