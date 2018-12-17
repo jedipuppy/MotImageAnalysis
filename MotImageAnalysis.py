@@ -113,7 +113,7 @@ class ImageAnalysis():
                 break;
             file_number += 1
 
-            if file_number > start_number and file_number <stop_number and stop_number != 0:
+            if file_number > start_number and (file_number <stop_number or stop_number == 0):
                 self.accum_img(self.img_array[-1],self.roi_array[-1])
         if self.upper_img_num != 0:
             print ("accum upper",file_number)

@@ -59,12 +59,12 @@ class ImageAnalysis():
         if img is None:
             return 1;
         modified_img = self.modifyImg(img,self.bg_img)
-
+        roi_img = img[self.y:self.y2,self.x:self.x2]
         roi_modified_img =modified_img[self.y:self.y2,self.x:self.x2]
 
 
 
-        roi = self.intensity(roi_modified_img)
+        roi = self.intensity(roi_img)
         MotNumber = self.NumberCalib.MOT_fluorescence_to_number(np.sum(img),10e-3,0.1)
         print(file_number,roi,MotNumber)
 
@@ -178,14 +178,18 @@ x = int(argvs[7])
 y = int(argvs[8])
 x2 = int(argvs[9])
 y2 =int(argvs[10])
+x_image =30
+y_image = 20
+x2_image = 125
+y2_image =115
 argc = len(argvs)  #number of parameters
 
 
 ########################################################################################################################
 #draw fig
 ########################################################################################################################
-vmin0 = 0
-vmax0 = 20
+vmin0 = 5
+vmax0 = 70
 
 image_ana = ImageAnalysis(filename,start_number2,stop_number2,background_file_number,start_number,stop_number,x,x2,y,y2)
 fig = plt.figure(figsize=(14,9))
@@ -206,8 +210,8 @@ ax6 = plt.subplot(gs[2,2])
 
 ax1.plot(image_ana.roi_array, linewidth=2)
 
-ax1.axvspan(image_ana.start_number, image_ana.start_number2, facecolor='r', alpha=0.3)
-ax1.axvspan(image_ana.stop_number,image_ana.stop_number2 , facecolor='b', alpha=0.3)
+ax1.axvspan(image_ana.start_number, image_ana.stop_number, facecolor='r', alpha=0.3)
+ax1.axvspan(image_ana.start_number2,image_ana.stop_number2 , facecolor='b', alpha=0.3)
 
 ax1.axvline(x =int(background_file_number), linewidth=1, color = 'salmon')        
 data5_ax1 = ax1.twinx()
@@ -236,9 +240,11 @@ data8_ax3.legend(loc=5)
 data5_ax1.legend(loc=0)
 data6_ax1.legend(loc=1)
 
-upper_img_fig = ax4.imshow(image_ana.upper_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='nearest')
-lower_img_fig = ax5.imshow(image_ana.lower_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='nearest')
-diff_img_fig = ax6.imshow(image_ana.diff_img, vmin = vmin0, vmax = vmax0,cmap=cm.jet, interpolation='nearest')
+ymesh, xmesh = np.mgrid[slice(y_image, y2_image, 1),
+                slice(x_image, x2_image, 1)]
+upper_img_fig = ax4.pcolormesh(xmesh,ymesh,np.flipud(image_ana.upper_img[y_image:y2_image,x_image:x2_image]), vmin = vmin0, vmax = vmax0,cmap=cm.jet)
+lower_img_fig = ax5.pcolormesh(xmesh,ymesh,np.flipud(image_ana.lower_img[y_image:y2_image,x_image:x2_image]), vmin = vmin0, vmax = vmax0,cmap=cm.jet)
+diff_img_fig = ax6.pcolormesh(xmesh,ymesh,np.flipud(image_ana.diff_img[y_image:y2_image,x_image:x2_image]), vmin = vmin0, vmax = vmax0,)
 
 rect1 = patches.Rectangle((x,y),x2-x,y2-y,linewidth=1,edgecolor='w',facecolor='none')
 rect2 = patches.Rectangle((x,y),x2-x,y2-y,linewidth=1,edgecolor='w',facecolor='none')
